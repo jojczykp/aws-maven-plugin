@@ -1,0 +1,4 @@
+.gitignore
+.idea/
+aws-maven-plugin.iml
+target/
