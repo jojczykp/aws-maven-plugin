@@ -53,13 +53,13 @@ public class SqsCreateQueue extends AbstractMojo {
 		while (timeLeft > 0) {
 			try {
 				String queueUrl = sqs.createQueue(queueName).getQueueUrl();
-				log.info("Queue created at url: " + queueUrl);
+				log.info("Success: Queue created at url: " + queueUrl);
 				return;
 			} catch (QueueNameExistsException e) {
 				log.error("Queue " + queueName + " already exists", e);
 				throw new MojoExecutionException("Queue " + queueName + " already exists", e);
 			} catch (QueueDeletedRecentlyException e) {
-				log.warn("Queue " + queueName + " deleted recently. Retry timeout left: " + timeLeft + "s");
+				log.warn("Queue " + queueName + " deleted recently. Retrying... Time left: " + timeLeft + "s");
 				timeLeft -= retryDelaySec;
 				try {
 					sleeper.sleep(retryDelaySec);

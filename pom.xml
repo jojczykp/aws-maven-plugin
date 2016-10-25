@@ -6,7 +6,7 @@
 
 	<groupId>pl.jojczykp.maven</groupId>
 	<artifactId>aws-maven-plugin</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>maven-plugin</packaging>
 	<name>AWS Maven Mojo</name>
 

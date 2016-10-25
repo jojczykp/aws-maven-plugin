@@ -2,6 +2,7 @@ package pl.jojczykp.maven.plugin.aws;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.model.GetQueueUrlResult;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 public class SqsDeleteQueueTest {
 
 	private static final Regions REGION_ID = Regions.EU_WEST_1;
+	private static final String QUEUE_NAME = "test-queue";
 	private static final String QUEUE_URL = "https://aws.com/user/test-queue";
 
 	@Rule
@@ -30,13 +32,14 @@ public class SqsDeleteQueueTest {
 	@Before
 	public void injectMojoProperties() {
 		mojo.regionName = REGION_ID.getName();
-		mojo.queueUrl = QUEUE_URL;
+		mojo.queueName = QUEUE_NAME;
 		mojo.sqsFactory = sqsFactory;
 	}
 
 	@Test
 	public void shouldDeleteQueue() throws MojoExecutionException {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
+		when(sqs.getQueueUrl(QUEUE_NAME)).thenReturn(new GetQueueUrlResult().withQueueUrl(QUEUE_URL));
 
 		mojo.execute();
 

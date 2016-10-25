@@ -20,7 +20,7 @@ public class SqsDeleteQueue extends AbstractMojo {
 	String regionName;
 
 	@Parameter(required = true)
-	String queueUrl;
+	String queueName;
 
 	SqsFactory sqsFactory = new SqsFactory();
 
@@ -34,12 +34,15 @@ public class SqsDeleteQueue extends AbstractMojo {
 
 	private void tryExecute() {
 		log.info("Configured region: " + regionName);
-		log.info("Configured queue url: " + queueUrl);
+		log.info("Configured queue name: " + queueName);
 
 		AmazonSQS sqs = sqsFactory.createSqs(Regions.fromName(regionName));
-		sqs.deleteQueue(queueUrl);
 
-		log.info("Queue " + queueUrl + " deleted (if was present)");
+		String queueUrl = sqs.getQueueUrl(queueName).getQueueUrl();
+		log.info("Found queue at url: " + queueUrl);
+
+		sqs.deleteQueue(queueUrl);
+		log.info("Success: Queue " + queueName + " requested to be deleted");
 	}
 
 }
