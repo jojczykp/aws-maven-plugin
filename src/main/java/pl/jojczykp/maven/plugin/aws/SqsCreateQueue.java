@@ -46,6 +46,7 @@ public class SqsCreateQueue extends AbstractMojo {
 		log.info("Configured region: " + regionName);
 		log.info("Configured queue name: " + queueName);
 		log.info("Configured retry timeout: " + retryTimeoutSec + "s");
+		log.info("Configured retry delay: " + retryDelaySec + "s");
 
 		AmazonSQS sqs = sqsFactory.createSqs(Regions.fromName(regionName));
 
