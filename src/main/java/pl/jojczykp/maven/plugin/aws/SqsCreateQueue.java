@@ -35,19 +35,12 @@ public class SqsCreateQueue extends AbstractMojo {
 	Sleeper sleeper = new Sleeper();
 
 	public void execute() throws MojoExecutionException {
-		log.info(getClass().getSimpleName() + " - start");
 		log.info("Configured region: " + regionName);
 		log.info("Configured queue name: " + queueName);
 		log.info("Configured retry timeout: " + retryTimeoutSec + "s");
 
 		AmazonSQS sqs = sqsFactory.createSqs(Regions.fromName(regionName));
 
-		tryCreateQueue(sqs);
-
-		log.info(getClass().getSimpleName() + " - end");
-	}
-
-	private void tryCreateQueue(AmazonSQS sqs) throws MojoExecutionException {
 		int timeLeft = retryTimeoutSec;
 		while (timeLeft > 0) {
 			try {
