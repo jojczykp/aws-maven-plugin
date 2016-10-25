@@ -35,6 +35,14 @@ public class SqsCreateQueue extends AbstractMojo {
 	Sleeper sleeper = new Sleeper();
 
 	public void execute() throws MojoExecutionException {
+		try {
+			tryExecute();
+		} catch (RuntimeException e) {
+			throw new MojoExecutionException(e.getMessage(), e);
+		}
+	}
+
+	private void tryExecute() throws MojoExecutionException {
 		log.info("Configured region: " + regionName);
 		log.info("Configured queue name: " + queueName);
 		log.info("Configured retry timeout: " + retryTimeoutSec + "s");

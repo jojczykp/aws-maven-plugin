@@ -25,6 +25,14 @@ public class SqsDeleteQueue extends AbstractMojo {
 	SqsFactory sqsFactory = new SqsFactory();
 
 	public void execute() throws MojoExecutionException {
+		try {
+			tryExecute();
+		} catch (RuntimeException e) {
+			throw new MojoExecutionException(e.getMessage(), e);
+		}
+	}
+
+	private void tryExecute() {
 		log.info("Configured region: " + regionName);
 		log.info("Configured queue url: " + queueUrl);
 

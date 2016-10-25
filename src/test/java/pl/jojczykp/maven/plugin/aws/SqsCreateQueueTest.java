@@ -14,6 +14,7 @@ import org.mockito.InOrder;
 import pl.jojczykp.maven.plugin.aws.tools.Sleeper;
 import pl.jojczykp.maven.plugin.aws.tools.SqsFactory;
 
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -32,7 +33,7 @@ public class SqsCreateQueueTest {
 	private static final int RETRY_DELAY_SEC = 2;
 
 	@Rule
-	public ExpectedException exception = ExpectedException.none();
+	public ExpectedException thrown = ExpectedException.none();
 
 	private SqsFactory sqsFactory = mock(SqsFactory.class);
 	private AmazonSQS sqs = mock(AmazonSQS.class);
@@ -85,8 +86,8 @@ public class SqsCreateQueueTest {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
 		when(sqs.createQueue(QUEUE_NAME)).thenThrow(new QueueNameExistsException(QUEUE_NAME));
 
-		exception.expect(MojoExecutionException.class);
-		exception.expectMessage("already exists");
+		thrown.expect(MojoExecutionException.class);
+		thrown.expectMessage("already exists");
 
 		try {
 			mojo.execute();
@@ -102,8 +103,8 @@ public class SqsCreateQueueTest {
 		when(sqs.createQueue(QUEUE_NAME)).thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME));
 		doThrow(new InterruptedException()).when(sleeper).sleep(RETRY_DELAY_SEC);
 
-		exception.expect(MojoExecutionException.class);
-		exception.expectMessage("interrupted");
+		thrown.expect(MojoExecutionException.class);
+		thrown.expectMessage("interrupted");
 
 		try {
 			mojo.execute();
@@ -118,8 +119,8 @@ public class SqsCreateQueueTest {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
 		when(sqs.createQueue(QUEUE_NAME)).thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME));
 
-		exception.expect(MojoExecutionException.class);
-		exception.expectMessage("creation timeout");
+		thrown.expect(MojoExecutionException.class);
+		thrown.expectMessage("creation timeout");
 
 		try {
 			mojo.execute();
@@ -128,6 +129,19 @@ public class SqsCreateQueueTest {
 			verify(sqs, times(tries)).createQueue(QUEUE_NAME);
 			verify(sleeper, times(tries)).sleep(RETRY_DELAY_SEC);
 		}
+	}
+
+	@Test
+	public void shouldTranslateRuntimeException() throws MojoExecutionException {
+		String message = "message";
+		RuntimeException cause = new RuntimeException(message);
+
+		when(sqsFactory.createSqs(REGION_ID)).thenThrow(cause);
+		thrown.expect(MojoExecutionException.class);
+		thrown.expectMessage(message);
+		thrown.expectCause(sameInstance(cause));
+
+		mojo.execute();
 	}
 
 	private int divUp(int num, int divisor) {
