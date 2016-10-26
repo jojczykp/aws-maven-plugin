@@ -1,21 +1,13 @@
-## AWS Maven Plugin
+# Amazon Web Services Maven Plugin
 
-# Currently implemented:
-- Create Queue
-- Delete Queue
+## Currently implemented:
+- SQS Create Queue
+- SQS Delete Queue
 
-# References
-- AWS CLI Command Reference: http://docs.aws.amazon.com/cli/latest/
-- http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html
-- http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteQueue.html
+## Usage example
 
-# Usage example
-
-```bash
-$ mvn verify
-```
-
-Where `pom.xml`:
+- [Local AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) is configured.
+- Sample `pom.xml`:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -72,3 +64,13 @@ Where `pom.xml`:
 
 </project>
 ```
+- Run:
+```bash
+$ mvn verify
+```
+
+## References
+- http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html
+- http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteQueue.html
+- AWS CLI Command Reference: http://docs.aws.amazon.com/cli/latest/
+- AWS CLI Getting Started: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
