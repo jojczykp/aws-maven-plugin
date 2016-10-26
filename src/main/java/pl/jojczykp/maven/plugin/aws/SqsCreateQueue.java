@@ -70,7 +70,7 @@ public class SqsCreateQueue extends AbstractMojo {
 			}
 		}
 
-		log.error("Queue " + queueName + "creation timeout");
+		log.error("Queue " + queueName + " creation timeout");
 		throw new MojoExecutionException("Queue " + queueName + " creation timeout");
 	}
 
