@@ -33,14 +33,18 @@
 			<plugin>
 				<groupId>pl.jojczykp.maven</groupId>
 				<artifactId>aws-maven-plugin</artifactId>
-				<version>0.1</version>
+				<version>0.2</version>
 				<executions>
 					<execution>
 						<id>create-queue</id>
 						<phase>pre-integration-test</phase>
 						<configuration>
 							<regionName>eu-west-1</regionName>
-							<queueName>sample-queue</queueName>
+							<queues>
+								<name>sample-queue-1</name>
+								<name>sample-queue-2</name>
+								<name>sample-queue-3</name>
+							</queues>
 						</configuration>
 						<goals>
 							<goal>sqs-create-queue</goal>
@@ -51,7 +55,11 @@
 						<phase>post-integration-test</phase>
 						<configuration>
 							<regionName>eu-west-1</regionName>
-							<queueName>sample-queue</queueName>
+							<queues>
+								<name>sample-queue-1</name>
+								<name>sample-queue-2</name>
+								<name>sample-queue-3</name>
+							</queues>
 						</configuration>
 						<goals>
 							<goal>sqs-delete-queue</goal>

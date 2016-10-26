@@ -18,8 +18,10 @@ import static org.mockito.Mockito.when;
 public class SqsDeleteQueueTest {
 
 	private static final Regions REGION_ID = Regions.EU_WEST_1;
-	private static final String QUEUE_NAME = "test-queue";
-	private static final String QUEUE_URL = "https://aws.com/user/test-queue";
+	private static final String QUEUE_NAME_1 = "test-queue-1";
+	private static final String QUEUE_URL_1 = "https://aws.com/user/test-queue-1";
+	private static final String QUEUE_NAME_2 = "test-queue-2";
+	private static final String QUEUE_URL_2 = "https://aws.com/user/test-queue-2";
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -32,18 +34,20 @@ public class SqsDeleteQueueTest {
 	@Before
 	public void injectMojoProperties() {
 		mojo.regionName = REGION_ID.getName();
-		mojo.queueName = QUEUE_NAME;
+		mojo.queues = new String[] {QUEUE_NAME_1, QUEUE_NAME_2};
 		mojo.sqsFactory = sqsFactory;
 	}
 
 	@Test
-	public void shouldDeleteQueue() throws MojoExecutionException {
+	public void shouldDeleteQueues() throws MojoExecutionException {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
-		when(sqs.getQueueUrl(QUEUE_NAME)).thenReturn(new GetQueueUrlResult().withQueueUrl(QUEUE_URL));
+		when(sqs.getQueueUrl(QUEUE_NAME_1)).thenReturn(new GetQueueUrlResult().withQueueUrl(QUEUE_URL_1));
+		when(sqs.getQueueUrl(QUEUE_NAME_2)).thenReturn(new GetQueueUrlResult().withQueueUrl(QUEUE_URL_2));
 
 		mojo.execute();
 
-		verify(sqs).deleteQueue(QUEUE_URL);
+		verify(sqs).deleteQueue(QUEUE_URL_1);
+		verify(sqs).deleteQueue(QUEUE_URL_2);
 	}
 
 	@Test

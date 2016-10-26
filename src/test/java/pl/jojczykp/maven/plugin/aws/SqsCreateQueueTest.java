@@ -27,8 +27,10 @@ import static org.mockito.Mockito.when;
 public class SqsCreateQueueTest {
 
 	private static final Regions REGION_ID = Regions.EU_WEST_1;
-	private static final String QUEUE_NAME = "test-queue";
-	private static final String QUEUE_URL = "https://aws.com/user/test-queue";
+	private static final String QUEUE_NAME_1 = "test-queue-1";
+	private static final String QUEUE_URL_1 = "https://aws.com/user/test-queue-1";
+	private static final String QUEUE_NAME_2 = "test-queue-2";
+	private static final String QUEUE_URL_2 = "https://aws.com/user/test-queue-2";
 	private static final int RETRY_TIMEOUT_SEC = 5;
 	private static final int RETRY_DELAY_SEC = 2;
 
@@ -44,7 +46,7 @@ public class SqsCreateQueueTest {
 	@Before
 	public void injectMojoProperties() {
 		mojo.regionName = REGION_ID.getName();
-		mojo.queueName = QUEUE_NAME;
+		mojo.queues = new String[] {QUEUE_NAME_1};
 		mojo.retryTimeoutSec = RETRY_TIMEOUT_SEC;
 		mojo.retryDelaySec = RETRY_DELAY_SEC;
 		mojo.sqsFactory = sqsFactory;
@@ -52,39 +54,42 @@ public class SqsCreateQueueTest {
 	}
 
 	@Test
-	public void shouldCreateQueue() throws MojoExecutionException {
+	public void shouldCreateQueues() throws MojoExecutionException {
+		mojo.queues = new String[] {QUEUE_NAME_1, QUEUE_NAME_2};
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
-		when(sqs.createQueue(QUEUE_NAME)).thenReturn(new CreateQueueResult().withQueueUrl(QUEUE_URL));
+		when(sqs.createQueue(QUEUE_NAME_1)).thenReturn(new CreateQueueResult().withQueueUrl(QUEUE_URL_1));
+		when(sqs.createQueue(QUEUE_NAME_2)).thenReturn(new CreateQueueResult().withQueueUrl(QUEUE_URL_2));
 
 		mojo.execute();
 
-		verify(sqs).createQueue(QUEUE_NAME);
+		verify(sqs).createQueue(QUEUE_NAME_1);
+		verify(sqs).createQueue(QUEUE_NAME_2);
 		verifyNoMoreInteractions(sqs, sleeper);
 	}
 
 	@Test
 	public void shouldRetrySuccessfullyIfQueueRecentlyDeleted() throws Exception {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
-		when(sqs.createQueue(QUEUE_NAME))
-				.thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME))
-				.thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME))
-				.thenReturn(new CreateQueueResult().withQueueUrl(QUEUE_URL));
+		when(sqs.createQueue(QUEUE_NAME_1))
+				.thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME_1))
+				.thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME_1))
+				.thenReturn(new CreateQueueResult().withQueueUrl(QUEUE_URL_1));
 
 		mojo.execute();
 
 		InOrder inOrder = inOrder(sqs, sleeper);
-		inOrder.verify(sqs).createQueue(QUEUE_NAME);
+		inOrder.verify(sqs).createQueue(QUEUE_NAME_1);
 		inOrder.verify(sleeper).sleep(RETRY_DELAY_SEC);
-		inOrder.verify(sqs).createQueue(QUEUE_NAME);
+		inOrder.verify(sqs).createQueue(QUEUE_NAME_1);
 		inOrder.verify(sleeper).sleep(RETRY_DELAY_SEC);
-		inOrder.verify(sqs).createQueue(QUEUE_NAME);
+		inOrder.verify(sqs).createQueue(QUEUE_NAME_1);
 		inOrder.verifyNoMoreInteractions();
 	}
 
 	@Test
 	public void shouldFailIfQueueAlreadyExists() throws Exception {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
-		when(sqs.createQueue(QUEUE_NAME)).thenThrow(new QueueNameExistsException(QUEUE_NAME));
+		when(sqs.createQueue(QUEUE_NAME_1)).thenThrow(new QueueNameExistsException(QUEUE_NAME_1));
 
 		thrown.expect(MojoExecutionException.class);
 		thrown.expectMessage("already exists");
@@ -92,7 +97,7 @@ public class SqsCreateQueueTest {
 		try {
 			mojo.execute();
 		} finally {
-			verify(sqs).createQueue(QUEUE_NAME);
+			verify(sqs).createQueue(QUEUE_NAME_1);
 			verifyZeroInteractions(sleeper);
 		}
 	}
@@ -100,7 +105,7 @@ public class SqsCreateQueueTest {
 	@Test
 	public void shouldFailIfInterrupted() throws Exception {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
-		when(sqs.createQueue(QUEUE_NAME)).thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME));
+		when(sqs.createQueue(QUEUE_NAME_1)).thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME_1));
 		doThrow(new InterruptedException()).when(sleeper).sleep(RETRY_DELAY_SEC);
 
 		thrown.expect(MojoExecutionException.class);
@@ -109,7 +114,7 @@ public class SqsCreateQueueTest {
 		try {
 			mojo.execute();
 		} finally {
-			verify(sqs).createQueue(QUEUE_NAME);
+			verify(sqs).createQueue(QUEUE_NAME_1);
 			verify(sleeper).sleep(RETRY_DELAY_SEC);
 		}
 	}
@@ -117,7 +122,7 @@ public class SqsCreateQueueTest {
 	@Test
 	public void shouldFailOnRetryIfQueueRecentlyDeletedAndCreationTimedOut() throws Exception {
 		when(sqsFactory.createSqs(REGION_ID)).thenReturn(sqs);
-		when(sqs.createQueue(QUEUE_NAME)).thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME));
+		when(sqs.createQueue(QUEUE_NAME_1)).thenThrow(new QueueDeletedRecentlyException(QUEUE_NAME_1));
 
 		thrown.expect(MojoExecutionException.class);
 		thrown.expectMessage("creation timeout");
@@ -126,7 +131,7 @@ public class SqsCreateQueueTest {
 			mojo.execute();
 		} finally {
 			int tries = divUp(RETRY_TIMEOUT_SEC, RETRY_DELAY_SEC);
-			verify(sqs, times(tries)).createQueue(QUEUE_NAME);
+			verify(sqs, times(tries)).createQueue(QUEUE_NAME_1);
 			verify(sleeper, times(tries)).sleep(RETRY_DELAY_SEC);
 		}
 	}
