@@ -1,7 +1,7 @@
 # Amazon Web Services Maven Plugin
 
 ## Currently implemented:
-- SQS Create Queue
+- SQS Create Queue (with retry logic)
 - SQS Delete Queue
 
 ## Usage example
