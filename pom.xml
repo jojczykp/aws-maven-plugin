@@ -71,7 +71,7 @@
 				<configuration>
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<stagingProfileId>19375019933d12</stagingProfileId>
+					<stagingProfileId>tbd</stagingProfileId>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
