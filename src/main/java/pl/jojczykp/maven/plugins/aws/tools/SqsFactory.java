@@ -1,4 +1,4 @@
-package pl.jojczykp.maven.plugin.aws.tools;
+package pl.jojczykp.maven.plugins.aws.tools;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;

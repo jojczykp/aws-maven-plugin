@@ -1,4 +1,4 @@
-package pl.jojczykp.maven.plugin.aws.tools;
+package pl.jojczykp.maven.plugins.aws.tools;
 
 public class Sleeper {
 

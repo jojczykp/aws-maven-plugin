@@ -1,4 +1,4 @@
-package pl.jojczykp.maven.plugin.aws;
+package pl.jojczykp.maven.plugins.aws;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
@@ -11,8 +11,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
-import pl.jojczykp.maven.plugin.aws.tools.Sleeper;
-import pl.jojczykp.maven.plugin.aws.tools.SqsFactory;
+import pl.jojczykp.maven.plugins.aws.tools.Sleeper;
+import pl.jojczykp.maven.plugins.aws.tools.SqsFactory;
 
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.doThrow;

@@ -6,7 +6,7 @@
 
 	<groupId>pl.jojczykp.maven</groupId>
 	<artifactId>aws-maven-plugin</artifactId>
-	<version>0.2</version>
+	<version>1.0.0</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>

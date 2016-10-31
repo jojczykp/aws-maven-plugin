@@ -1,4 +1,4 @@
-package pl.jojczykp.maven.plugin.aws;
+package pl.jojczykp.maven.plugins.aws;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
@@ -7,7 +7,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import pl.jojczykp.maven.plugin.aws.tools.SqsFactory;
+import pl.jojczykp.maven.plugins.aws.tools.SqsFactory;
 
 import java.util.Arrays;
 
