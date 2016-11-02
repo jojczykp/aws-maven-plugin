@@ -33,6 +33,17 @@
 		<url>https://github.com/jojczykp/aws-maven-plugin</url>
 	</scm>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
 	<issueManagement>
 		<url>https://github.com/jojczykp/aws-maven-plugin/issues</url>
 		<system>GitHub Issues</system>
@@ -101,18 +112,18 @@
 				</configuration>
 			</plugin>
 
-			<!--<plugin>-->
-				<!--<groupId>org.sonatype.plugins</groupId>-->
-				<!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
-				<!--<version>1.6.7</version>-->
-				<!--<extensions>true</extensions>-->
-				<!--<configuration>-->
-					<!--<serverId>ossrh</serverId>-->
-					<!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
-					<!--<stagingProfileId>tbd</stagingProfileId>-->
-					<!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
-				<!--</configuration>-->
-			<!--</plugin>-->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<stagingProfileId>jojczykp</stagingProfileId>
+					<autoReleaseAfterClose>false</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
 
 		</plugins>
 	</build>
