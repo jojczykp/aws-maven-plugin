@@ -17,7 +17,7 @@
 
 	<groupId>pl.jojczykp.maven</groupId>
 	<artifactId>aws-maven-plugin-test</artifactId>
-	<version>0.1</version>
+	<version>1.0-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
@@ -31,9 +31,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>pl.jojczykp.maven</groupId>
+				<groupId>pl.jojczykp.maven.plugins</groupId>
 				<artifactId>aws-maven-plugin</artifactId>
-				<version>0.2</version>
+				<version>1.0.0</version>
 				<executions>
 					<execution>
 						<id>create-queue</id>
