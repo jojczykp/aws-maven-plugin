@@ -36,7 +36,7 @@
 				<version>1.0.0</version>
 				<executions>
 					<execution>
-						<id>create-queue</id>
+						<id>create-queues</id>
 						<phase>pre-integration-test</phase>
 						<configuration>
 							<regionName>eu-west-1</regionName>
@@ -51,7 +51,7 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>delete-queue</id>
+						<id>delete-queues</id>
 						<phase>post-integration-test</phase>
 						<configuration>
 							<regionName>eu-west-1</regionName>
