@@ -78,6 +78,7 @@ $ mvn verify
 ```
 
 ## References
+- MVN Repo: https://mvnrepository.com/artifact/pl.jojczykp.maven.plugins/aws-maven-plugin
 - http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html
 - http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteQueue.html
 - AWS CLI Command Reference: http://docs.aws.amazon.com/cli/latest/
